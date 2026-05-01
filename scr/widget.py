@@ -19,3 +19,18 @@ def mask_account_card(payment_identifier: str) -> str:
         return payment_identifier[0 : payment_identifier.rfind(" ") + 1] + masks.get_mask_account(
             payment_identifier[payment_identifier.rfind(" ") + 1 :]
         )
+
+
+def get_date(date_time: str) -> str:
+    """
+    Принимает на вход строку с датой в формате "2024-03-11T02:26:18.671407"
+    Возвращает строку с датой в формате "ДД.ММ.ГГГГ" ("11.03.2024")
+    При вводе неподдерживаемого формата, пишет ошибку
+    """
+    from datetime import datetime
+
+    try:
+        formatted_date = str(datetime.fromisoformat(date_time))
+        return formatted_date[8:10] + "." + formatted_date[5:7] + "." + formatted_date[:4]
+    except ValueError:
+        return "Ошибка ввода: Введите кооректные данные по дате в ISO виде (например: 2024-03-11T02:26:18.671407)"
