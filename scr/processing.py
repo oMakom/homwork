@@ -1,4 +1,4 @@
-def filter_by_state(transactions_list: list, state: str = "EXECUTED") -> list:
+def filter_by_state(transactions_list: list[dict], state: str = "EXECUTED") -> list[dict]:
     """
     Принимает список словарей и опционально значение для ключа state (по умолчанию 'EXECUTED').
     Возвращает новый список словарей, содержащий только те словари, у которых state соответствует указанному значению
@@ -12,7 +12,7 @@ def filter_by_state(transactions_list: list, state: str = "EXECUTED") -> list:
     return the_filtered_list
 
 
-def sort_by_date(transactions_list: list, is_reverse: bool = True) -> list:
+def sort_by_date(transactions_list: list[dict], is_reverse: bool = True) -> list[dict]:
     """
     Принимает список словарей и необязательный параметр, задающий порядок сортировки (по умолчанию — убывание).
     Функция должна возвращать новый список, отсортированный по дате
