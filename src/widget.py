@@ -1,4 +1,4 @@
-import scr.masks as masks
+import src.masks as masks
 
 
 def mask_account_card(payment_identifier: str) -> str:
