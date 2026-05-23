@@ -25,25 +25,25 @@ def transaction_descriptions(transactions: list[dict]) -> Iterator[str]:
             continue
 
 
-def card_number_generator(start: int, end: int) -> Iterator[str]:
+def card_number_generator(start: int, stop: int) -> Iterator[str]:
     """
     Генератор который выдает номера банковских карт в формате XXXX XXXX XXXX XXXX
     Генератор может сгенерировать номера карт в заданном диапазоне от 0000 0000 0000 0001 до 9999 9999 9999 9999
     """
-    if str(start).isdigit() and str(end).isdigit():
+    if str(start).isdigit() and str(stop).isdigit():
         #если все таки перепутали тип и написали строкой -> переобразуем в int
         if not isinstance(start, int):
             start=int(start)
-        if not isinstance(end, int):
-            end=int(end)
+        if not isinstance(stop, int):
+            end=int(stop)
         #если значения "перепутаны" -> меняем местами
-        if start > end:
+        if start > stop:
             dubbl_start = start
-            start = end
-            end = dubbl_start
+            start = stop
+            stop = dubbl_start
         if start < 0:
             start = 0
-        for card_number in range(start, end + 1):
+        for card_number in range(start, stop + 1):
             #если номер карты вылезает за диапазон -> прерываем цикл
             if card_number > 9999999999999999:
                 break
