@@ -31,20 +31,20 @@ def card_number_generator(start: int, stop: int) -> Iterator[str]:
     Генератор может сгенерировать номера карт в заданном диапазоне от 0000 0000 0000 0001 до 9999 9999 9999 9999
     """
     if str(start).isdigit() and str(stop).isdigit():
-        #если все таки перепутали тип и написали строкой -> переобразуем в int
+        # если все таки перепутали тип и написали строкой -> переобразуем в int
         if not isinstance(start, int):
-            start=int(start)
+            start = int(start)
         if not isinstance(stop, int):
-            end=int(stop)
-        #если значения "перепутаны" -> меняем местами
+            stop = int(stop)
+        # если значения "перепутаны" -> меняем местами
         if start > stop:
             dubbl_start = start
             start = stop
             stop = dubbl_start
-        if start < 0:
-            start = 0
+        if start < 1:
+            start = 1
         for card_number in range(start, stop + 1):
-            #если номер карты вылезает за диапазон -> прерываем цикл
+            # если номер карты вылезает за диапазон -> прерываем цикл
             if card_number > 9999999999999999:
                 break
 

@@ -1,6 +1,6 @@
 import pytest
 
-from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 @pytest.fixture
@@ -134,7 +134,7 @@ def test_transaction_descriptions_note_transactions(transactions: list[dict] = (
         next(transaction_descriptions_test)
 
 
-def test_card_number_generator(start: int=25, end: int=30) -> None:
+def test_card_number_generator(start: int = 25, end: int = 30) -> None:
     """Проверка корректных значений"""
     card_number_generator_test = card_number_generator(start, end)
     assert next(card_number_generator_test) == "0000 0000 0000 0025"
@@ -144,7 +144,7 @@ def test_card_number_generator(start: int=25, end: int=30) -> None:
     assert next(card_number_generator_test) == "0000 0000 0000 0029"
 
 
-def test_card_number_generator_revers(start: int=30, end: int=25) -> None:
+def test_card_number_generator_revers(start: int = 30, end: int = 25) -> None:
     """Проверка некорректных(обратных) значений"""
     card_number_generator_test = card_number_generator(start, end)
     assert next(card_number_generator_test) == "0000 0000 0000 0025"
@@ -152,6 +152,7 @@ def test_card_number_generator_revers(start: int=30, end: int=25) -> None:
     assert next(card_number_generator_test) == "0000 0000 0000 0027"
     assert next(card_number_generator_test) == "0000 0000 0000 0028"
     assert next(card_number_generator_test) == "0000 0000 0000 0029"
+
 
 @pytest.mark.parametrize("start, end", [("кпцу", 25), ("", ""), (0, ""), (-5, 10)])
 def test_card_number_generator_boundary_values(start: int, end: int) -> None:
@@ -161,7 +162,7 @@ def test_card_number_generator_boundary_values(start: int, end: int) -> None:
         next(card_number_generator_test)
 
 
-def test_card_number_generator_uncorrected(start: int=9999999999999999, end: int=199999999999999999) -> None:
+def test_card_number_generator_uncorrected(start: int = 9999999999999999, end: int = 199999999999999999) -> None:
     """Проверка некорректных(граничных) значений"""
     card_number_generator_test = card_number_generator(start, end)
     assert next(card_number_generator_test) == "9999 9999 9999 9999"
