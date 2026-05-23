@@ -132,3 +132,38 @@ def test_transaction_descriptions_note_transactions(transactions: list[dict] = (
     transaction_descriptions_test = transaction_descriptions(transactions)
     with pytest.raises(StopIteration):
         next(transaction_descriptions_test)
+
+
+def test_card_number_generator(start: int=25, end: int=30) -> None:
+    """Проверка корректных значений"""
+    card_number_generator_test = card_number_generator(start, end)
+    assert next(card_number_generator_test) == "0000 0000 0000 0025"
+    assert next(card_number_generator_test) == "0000 0000 0000 0026"
+    assert next(card_number_generator_test) == "0000 0000 0000 0027"
+    assert next(card_number_generator_test) == "0000 0000 0000 0028"
+    assert next(card_number_generator_test) == "0000 0000 0000 0029"
+
+
+def test_card_number_generator_revers(start: int=30, end: int=25) -> None:
+    """Проверка некорректных(обратных) значений"""
+    card_number_generator_test = card_number_generator(start, end)
+    assert next(card_number_generator_test) == "0000 0000 0000 0025"
+    assert next(card_number_generator_test) == "0000 0000 0000 0026"
+    assert next(card_number_generator_test) == "0000 0000 0000 0027"
+    assert next(card_number_generator_test) == "0000 0000 0000 0028"
+    assert next(card_number_generator_test) == "0000 0000 0000 0029"
+
+@pytest.mark.parametrize("start, end", [("кпцу", 25), ("", ""), (0, ""), (-5, 10)])
+def test_card_number_generator_boundary_values(start: int, end: int) -> None:
+    """Проверка некорректных(текстовых) значений"""
+    card_number_generator_test = card_number_generator(start, end)
+    with pytest.raises(StopIteration):
+        next(card_number_generator_test)
+
+
+def test_card_number_generator_uncorrected(start: int=9999999999999999, end: int=199999999999999999) -> None:
+    """Проверка некорректных(граничных) значений"""
+    card_number_generator_test = card_number_generator(start, end)
+    assert next(card_number_generator_test) == "9999 9999 9999 9999"
+    with pytest.raises(StopIteration):
+        next(card_number_generator_test)
