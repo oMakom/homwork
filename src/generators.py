@@ -30,18 +30,27 @@ def card_number_generator(start: int, end: int) -> Iterator[str]:
     Генератор который выдает номера банковских карт в формате XXXX XXXX XXXX XXXX
     Генератор может сгенерировать номера карт в заданном диапазоне от 0000 0000 0000 0001 до 9999 9999 9999 9999
     """
-    if start > end:
-        dubbl_start = start
-        start = end
-        end = dubbl_start
+    if str(start).isdigit() and str(end).isdigit():
+        #если все таки перепутали тип и написали строкой -> переобразуем в int
+        if not isinstance(start, int):
+            start=int(start)
+        if not isinstance(end, int):
+            end=int(end)
+        #если значения "перепутаны" -> меняем местами
+        if start > end:
+            dubbl_start = start
+            start = end
+            end = dubbl_start
+        if start < 0:
+            start = 0
+        for card_number in range(start, end + 1):
+            #если номер карты вылезает за диапазон -> прерываем цикл
+            if card_number > 9999999999999999:
+                break
 
-    for card_number in range(start, end + 1):
-        if card_number > 9999999999999999:
-            break
-
-        str_card_number = f"{card_number:016d}"
-        result_card_number = (
-            f"{str_card_number[0:4]} {str(str_card_number)[4:8]} {str(str_card_number)[8:12]}"
-            f" {str(str_card_number)[12:16]}"
-        )
-        yield result_card_number
+            str_card_number = f"{card_number:016d}"
+            result_card_number = (
+                f"{str_card_number[0:4]} {str(str_card_number)[4:8]} {str(str_card_number)[8:12]}"
+                f" {str(str_card_number)[12:16]}"
+            )
+            yield result_card_number
