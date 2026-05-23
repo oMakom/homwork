@@ -62,7 +62,6 @@ def transactions() -> list[dict]:
                     "name": "руб.",
                 },
             },
-            "description": "Перевод организации",
             "from": "Visa Platinum 1246377376343588",
             "to": "Счет 14211924144426031657",
         },
@@ -70,50 +69,39 @@ def transactions() -> list[dict]:
     return transactions_list
 
 
-@pytest.mark.parametrize(
-    "currency, expected",
-    [
-        (
-            "USD",
-            [
-                {
-                    "id": 939719570,
-                    "state": "EXECUTED",
-                    "date": "2018-06-30T02:08:58.425572",
-                    "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
-                    "description": "Перевод организации",
-                    "from": "Счет 75106830613657916952",
-                    "to": "Счет 11776614605963066702",
-                },
-                {
-                    "id": 142264268,
-                    "state": "EXECUTED",
-                    "date": "2019-04-04T23:20:05.206878",
-                    "operationAmount": {"amount": "79114.93", "currency": {"name": "USD", "code": "USD"}},
-                    "description": "Перевод со счета на счет",
-                    "from": "Счет 19708645243227258542",
-                    "to": "Счет 75651667383060284188",
-                },
-                {
-                    "id": 895315941,
-                    "state": "EXECUTED",
-                    "date": "2018-08-19T04:27:37.904916",
-                    "operationAmount": {"amount": "56883.54", "currency": {"name": "USD", "code": "USD"}},
-                    "description": "Перевод с карты на карту",
-                    "from": "Visa Classic 6831982476737658",
-                    "to": "Visa Platinum 8990922113665229",
-                },
-            ],
-        ),
-    ],
-)
-def test_filter_by_currency(transactions: list[dict], currency: str, expected: dict) -> None:
+def test_filter_by_currency(transactions: list[dict], currency: str = "USD") -> None:
     """Проверка корректных значений"""
     filter_by_currency_test = filter_by_currency(transactions, currency)
-    assert next(filter_by_currency_test)
+    assert next(filter_by_currency_test) == {
+        "id": 939719570,
+        "state": "EXECUTED",
+        "date": "2018-06-30T02:08:58.425572",
+        "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
+        "description": "Перевод организации",
+        "from": "Счет 75106830613657916952",
+        "to": "Счет 11776614605963066702",
+    }
+    assert next(filter_by_currency_test) == {
+        "id": 142264268,
+        "state": "EXECUTED",
+        "date": "2019-04-04T23:20:05.206878",
+        "operationAmount": {"amount": "79114.93", "currency": {"name": "USD", "code": "USD"}},
+        "description": "Перевод со счета на счет",
+        "from": "Счет 19708645243227258542",
+        "to": "Счет 75651667383060284188",
+    }
+    assert next(filter_by_currency_test) == {
+        "id": 895315941,
+        "state": "EXECUTED",
+        "date": "2018-08-19T04:27:37.904916",
+        "operationAmount": {"amount": "56883.54", "currency": {"name": "USD", "code": "USD"}},
+        "description": "Перевод с карты на карту",
+        "from": "Visa Classic 6831982476737658",
+        "to": "Visa Platinum 8990922113665229",
+    }
 
 
-@pytest.mark.parametrize("currency", [(" "), ("Долар"), (1232)])
+@pytest.mark.parametrize("currency", [" ", "Долар", 1232])
 def test_filter_by_not_currency(transactions: list[dict], currency: str) -> None:
     """Проверка отсутствия корректных значений(Проверка Конца Итерации)"""
     filter_by_currency_test = filter_by_currency(transactions, currency)
@@ -123,7 +111,24 @@ def test_filter_by_not_currency(transactions: list[dict], currency: str) -> None
 
 @pytest.mark.parametrize("transactions_null, currency", [([], " "), ([], "Долар"), ([], 1232)])
 def test_filter_by_note_transactions(transactions_null: list, currency: str) -> None:
-    """Проверка отсутствия списка итераций"""
+    """Проверка отсутствия списка транзакций"""
     filter_by_currency_test = filter_by_currency(transactions_null, currency)
     with pytest.raises(StopIteration):
         next(filter_by_currency_test)
+
+
+def test_transaction_descriptions(transactions: list[dict]) -> None:
+    """Проверка корректных значений"""
+    transaction_descriptions_test = transaction_descriptions(transactions)
+    assert next(transaction_descriptions_test) == "Перевод организации"
+    assert next(transaction_descriptions_test) == "Перевод со счета на счет"
+    assert next(transaction_descriptions_test) == "Перевод со счета на счет"
+    assert next(transaction_descriptions_test) == "Перевод с карты на карту"
+    assert next(transaction_descriptions_test) == "Перевод организации"
+
+
+def test_transaction_descriptions_note_transactions(transactions: list[dict] = ([])) -> None:
+    """Проверка отсутствия списка транзакций"""
+    transaction_descriptions_test = transaction_descriptions(transactions)
+    with pytest.raises(StopIteration):
+        next(transaction_descriptions_test)
