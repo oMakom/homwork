@@ -3,7 +3,7 @@ from src.decorators import log
 
 def test_log_to_console(capsys):
     @log()
-    def test_func(x, y):
+    def test_func(x: float | int, y: float | int) -> float | int:
         return x / y + x
 
     test_func(1, 2)
