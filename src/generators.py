@@ -41,12 +41,13 @@ def card_number_generator(start: int, stop: int) -> Iterator[str]:
             dubbl_start = start
             start = stop
             stop = dubbl_start
-        if start < 1:
+
+        if start == 0:
             start = 1
+        if stop > 9999999999999999:
+            stop = 9999999999999999
+
         for card_number in range(start, stop + 1):
-            # если номер карты вылезает за диапазон -> прерываем цикл
-            if card_number > 9999999999999999:
-                break
 
             str_card_number = f"{card_number:016d}"
             result_card_number = (
