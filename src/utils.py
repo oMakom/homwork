@@ -15,3 +15,26 @@ def transaction_json_in_python(json_path:str="data/operations.json") -> list | l
     except:
         transaction_data = []
     return transaction_data
+
+
+def transaction_amount(transaction:dict) -> float:
+    """
+    принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях, тип данных — float
+    Если транзакция была в USD или EUR, происходит обращение к внешнему API для получения
+    текущего курса валют и конвертации суммы операции в рубли
+    """
+    #Временная реализация курса валют
+    curs= {"USD": 74.30, "EUR": 86.27, "RUB": 1}
+
+    if transaction.get("operationAmount").get("currency").get("code") and transaction.get("operationAmount").get("amount"):
+        operation_code = transaction.get("operationAmount").get("currency").get("code")
+        operation_amount = transaction.get("operationAmount").get("amount")
+
+        if operation_code in curs:
+            result_value = round(float(operation_amount) * float(curs[operation_code]), 2)
+            return result_value
+        else:
+            return 0
+
+    else:
+        return 0
