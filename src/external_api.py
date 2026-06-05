@@ -4,7 +4,7 @@ import requests
 def exchange_rate(currency: str = "RUB") -> float:
     """
     Обращение к внешнему источнику для получения текущего курса валют и конвертации суммы операции в рубли
-    Получает код краса валют, на выходе курс валюты по отношению к рублю
+    Получает код курса валют, на выходе курс валюты по отношению к рублю
     """
     url = "https://www.cbr-xml-daily.ru/daily_json.js"
     list_of_currencies = requests.get(url).json()
