@@ -1,7 +1,7 @@
 import requests
 
 
-def exchange_rate(currency:str="RUB") -> float:
+def exchange_rate(currency: str = "RUB") -> float:
     """
     Обращение к внешнему источнику для получения текущего курса валют и конвертации суммы операции в рубли
     Получает код краса валют, на выходе курс валюты по отношению к рублю
