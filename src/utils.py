@@ -1,4 +1,5 @@
 import json
+
 import src.external_api as external_api
 
 
