@@ -22,6 +22,7 @@ def test_json_decode_error():
 
 @patch("src.external_api.exchange_rate")
 def test_transaction_amount(mock_rate):
+    """Тест обработки корректности с параметром валюы 50"""
     mock_rate.return_value = 50
     assert (
         transaction_amount(
