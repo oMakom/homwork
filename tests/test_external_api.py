@@ -1,6 +1,7 @@
 import os
-from dotenv import load_dotenv
 from unittest.mock import Mock, patch
+
+from dotenv import load_dotenv
 
 from src.external_api import exchange_rate
 
