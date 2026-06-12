@@ -12,38 +12,38 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def read_cvs_file(file_path: str) -> List[Dict[Hashable, Any]]:
+def read_csv_file(file_path: str) -> List[Dict[Hashable, Any]]:
     """
     Функция читает cvs файл. Принимает на фход путь к файлу и выводит список словарей (при ошибках пустой список)
     """
-    logger.info(f"вызов read_cvs_file с путем до файла: {file_path}")
+    logger.info(f"вызов read_csv_file с путем до файла: {file_path}")
     transactions: List[Dict[Hashable, Any]] = []
     try:
         with open(file_path, "r", encoding="utf-8") as f:
-            logger.info(f"read_cvs_file чтение файла: {file_path}")
+            logger.info(f"read_csv_file чтение файла: {file_path}")
             read_cvs = csv.DictReader(f, delimiter=";")
             for row in read_cvs:
                 if any(value for value in row.values() if value):
                     transactions.append(dict(row))
     except FileNotFoundError as er_file:
-        logger.error(f"read_cvs_file ошибка открытия файла: {er_file}")
+        logger.error(f"read_csv_file ошибка открытия файла: {er_file}")
     except Exception as e:
-        logger.error(f"read_cvs_file непредвиденная ошибка: ({e})")
-    logger.info("read_cvs_file завершение работы")
+        logger.error(f"read_csv_file непредвиденная ошибка: ({e})")
+    logger.info("read_csv_file завершение работы")
     return transactions
 
 
-def read_exel_file(file_path: str) -> List[Dict[Hashable, Any]]:
+def read_excel_file(file_path: str) -> List[Dict[Hashable, Any]]:
     """
     Функция читает exls файл. Принимает на фход путь к файлу и выводит список словарей (при ошибках пустой список)
     """
-    logger.info(f"вызов read_exel_file с путем до файла: {file_path}")
+    logger.info(f"вызов read_excel_file с путем до файла: {file_path}")
     try:
         df = pd.read_excel(file_path)
         transactions = df.to_dict(orient="records")
-        logger.info("read_exel_file завершение функции")
+        logger.info("read_excel_file завершение функции")
         return transactions
     except Exception as e:
         transactions = []
-        logger.error(f"read_exel_file завершение функции с ошибкой({e}). На выходе пустой список")
+        logger.error(f"read_excel_file завершение функции с ошибкой({e}). На выходе пустой список")
         return transactions
