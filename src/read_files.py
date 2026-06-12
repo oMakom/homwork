@@ -1,6 +1,6 @@
 import csv
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, Hashable, List
 
 import pandas as pd
 
@@ -12,9 +12,12 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def read_cvs_file(file_path):
+def read_cvs_file(file_path: str) -> List[Dict[Hashable, Any]]:
+    """
+    Функция читает cvs файл. Принимает на фход путь к файлу и выводит список словарей (при ошибках пустой список)
+    """
     logger.info(f"вызов read_cvs_file с путем до файла: {file_path}")
-    transactions: List[Dict[str, Any]] = []
+    transactions: List[Dict[Hashable, Any]] = []
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             logger.info(f"read_cvs_file чтение файла: {file_path}")
@@ -30,7 +33,10 @@ def read_cvs_file(file_path):
     return transactions
 
 
-def read_exel_file(file_path):
+def read_exel_file(file_path: str) -> List[Dict[Hashable, Any]]:
+    """
+    Функция читает exls файл. Принимает на фход путь к файлу и выводит список словарей (при ошибках пустой список)
+    """
     logger.info(f"вызов read_exel_file с путем до файла: {file_path}")
     try:
         df = pd.read_excel(file_path)
@@ -38,6 +44,6 @@ def read_exel_file(file_path):
         logger.info("read_exel_file завершение функции")
         return transactions
     except Exception as e:
-        transactions: List[Dict[str, Any]] = []
+        transactions = []
         logger.error(f"read_exel_file завершение функции с ошибкой({e}). На выходе пустой список")
         return transactions
