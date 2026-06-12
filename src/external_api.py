@@ -1,8 +1,8 @@
-import os
 import logging
+import os
+
 import requests
 from dotenv import load_dotenv
-
 
 logger = logging.getLogger("external_api.py")
 logger.setLevel(logging.INFO)
