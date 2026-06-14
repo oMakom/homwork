@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 
 def filter_by_state(transactions_list: list[dict], state: str = "EXECUTED") -> list[dict]:
     """
@@ -37,9 +38,8 @@ def sort_by_date(transactions_list: list[dict], is_reverse: bool = True) -> list
 
 def process_bank_search(data:list[dict], search:str) -> list[dict]:
     """
-    Принимает список словарей с данными о банковских операциях и список категорий операций, а возвращает словарь,
-    в котором ключи — это названия категорий, а значения — это количество операций в каждой категории.
-    Категории операций хранятся в поле description
+    Принимать список словарей с данными о банковских операциях и строку поиска, а возвращать список словарей,
+    у которых в описании есть данная строка
     """
     result = []
     for transaction in data:
@@ -49,4 +49,14 @@ def process_bank_search(data:list[dict], search:str) -> list[dict]:
 
 
 def process_bank_operations(data:list[dict], categories:list) -> dict:
-    pass
+    """
+    Принимает список словарей с данными о банковских операциях и список категорий операций, а возвращает словарь,
+    в котором ключи — это названия категорий, а значения — это количество операций в каждой категории.
+    Категории операций хранятся в поле description
+    """
+    result_dict = defaultdict(int)
+    for transaction in data:
+        for category in categories:
+            if transaction.get("description") and (category.lower() == transaction["description"].lower()):
+                result_dict[transaction["description"]] += 1
+    return dict(result_dict)
