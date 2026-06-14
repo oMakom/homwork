@@ -1,6 +1,6 @@
 import pytest
 
-from src.processing import filter_by_state, sort_by_date
+from src.processing import filter_by_state, sort_by_date, process_bank_search, process_bank_operations
 
 
 @pytest.mark.parametrize(
@@ -126,3 +126,41 @@ def test_filter_by_state(transactions_list: list[dict], state: str, expected: li
 )
 def test_sort_by_date(transactions_list: list[dict], is_reverse: bool, expected: list[dict]) -> None:
     assert sort_by_date(transactions_list, is_reverse) == expected
+
+
+@pytest.mark.parametrize("search, excepted", [("Перевод орган", [{
+    "id": 441945886,
+    "state": "EXECUTED",
+    "date": "2019-08-26T10:50:58.294041",
+    "operationAmount": {
+      "amount": "31957.58",
+      "currency": {
+        "name": "руб.",
+        "code": "RUB"
+      }
+    },
+    "description": "Перевод организации",
+    "from": "Maestro 1596837868705199",
+    "to": "Счет 64686473678894779589"
+  }]),
+    ("рытие вклад",[{
+    "id": 587085106,
+    "state": "EXECUTED",
+    "date": "2018-03-23T10:45:06.972075",
+    "operationAmount": {
+      "amount": "48223.05",
+      "currency": {
+        "name": "руб.",
+        "code": "RUB"
+      }
+    },
+    "description": "Открытие вклада",
+    "to": "Счет 41421565395219882431"
+  }])])
+def test_process_bank_search(data_operations_dict, search, excepted) -> None:
+    assert process_bank_search(data_operations_dict, search) == excepted
+
+
+def test_process_bank_operations(data_operations_dict) -> None:
+    assert process_bank_operations(data_operations_dict, ["Перевод организации", "Открытие вклада"]) == {
+           "Перевод организации": 1, "Открытие вклада": 1}
