@@ -9,7 +9,7 @@ def filter_by_state(transactions_list: list[dict], state: str = "EXECUTED") -> l
     the_filtered_list = []
 
     for transactions in transactions_list:
-        if transactions["state"] == state:
+        if transactions.get("state") == state:
             the_filtered_list.append(transactions)
 
     return the_filtered_list
