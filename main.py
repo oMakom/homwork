@@ -47,12 +47,12 @@ def main() -> None:
         logger.error(f"main пользователь выбрал неверный пункт: {menu}")
     logger.info(f"main пользователь выбрал пункт: {menu}")
     # 2 запрос статуса, по которому необходимо выполнить фильтрацию
-    valid_states = ["EXECUTED", "CANCELED", "PENDING2"]
-    logger.info("main Запрос пользователю по статусу операции (EXECUTED, CANCELED, PENDING2)")
+    valid_states = ["EXECUTED", "CANCELED", "PENDING"]
+    logger.info("main Запрос пользователю по статусу операции (EXECUTED, CANCELED, PENDING)")
     while True:
         state_input = input(
             "Введите статус, по которому необходимо выполнить фильтрацию."
-            "\nДоступные для фильтровки статусы: EXECUTED, CANCELED, PENDING2"
+            "\nДоступные для фильтровки статусы: EXECUTED, CANCELED, PENDING"
             "\n\nВвод данных: "
             ""
         )
@@ -65,9 +65,9 @@ def main() -> None:
                 transactions_state_filtered = processing.filter_by_state(transactions, "CANCELED")
                 print("\nОперации отфильтрованы по статусу CANCELED")
                 break
-            if state_input.lower() == "pending2":
-                transactions_state_filtered = processing.filter_by_state(transactions, "PENDING2")
-                print("\nОперации отфильтрованы по статусу PENDING2")
+            if state_input.lower() == "pending":
+                transactions_state_filtered = processing.filter_by_state(transactions, "PENDING")
+                print("\nОперации отфильтрованы по статусу PENDING")
                 break
         print(f"\nСтатус операции {state_input} недоступен.\n")
         logger.error(f"main Пользователь выбрал неверный статус операции: {state_input}")
