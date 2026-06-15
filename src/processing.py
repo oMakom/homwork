@@ -1,5 +1,5 @@
 import re
-from collections import defaultdict
+from collections import Counter
 
 
 def filter_by_state(transactions_list: list[dict], state: str = "EXECUTED") -> list[dict]:
@@ -57,9 +57,10 @@ def process_bank_operations(data: list[dict], categories: list) -> dict:
     в котором ключи — это названия категорий, а значения — это количество операций в каждой категории.
     Категории операций хранятся в поле description
     """
-    result_dict = defaultdict(int)
+    result_list = []
     for transaction in data:
         for category in categories:
             if transaction.get("description") and (category.lower() == transaction["description"].lower()):
-                result_dict[transaction["description"]] += 1
-    return dict(result_dict)
+                result_list.append(transaction["description"])
+    counted = Counter(result_list)
+    return counted
