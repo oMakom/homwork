@@ -1,3 +1,7 @@
+import re
+from collections import Counter
+
+
 def filter_by_state(transactions_list: list[dict], state: str = "EXECUTED") -> list[dict]:
     """
     Принимает список словарей и опционально значение для ключа state (по умолчанию 'EXECUTED').
@@ -6,7 +10,7 @@ def filter_by_state(transactions_list: list[dict], state: str = "EXECUTED") -> l
     the_filtered_list = []
 
     for transactions in transactions_list:
-        if transactions["state"] == state:
+        if transactions.get("state") == state:
             the_filtered_list.append(transactions)
 
     return the_filtered_list
@@ -25,9 +29,38 @@ def sort_by_date(transactions_list: list[dict], is_reverse: bool = True) -> list
             id_transactions = transactions["id"]
             datetime.fromisoformat(transactions["date"])
     except ValueError:
-        return (f"Ошибка ввода: Введите кооректные данные по дате в ISO виде (например: 2024-03-11T02:26:18.671407) в "
-                f"транзакции ID {id_transactions}")
+        return (
+            f"Ошибка ввода: Введите кооректные данные по дате в ISO виде (например: 2024-03-11T02:26:18.671407) в "
+            f"транзакции ID {id_transactions}"
+        )
 
     the_sorted_list = sorted(transactions_list, key=lambda key_date: key_date["date"], reverse=is_reverse)
 
     return the_sorted_list
+
+
+def process_bank_search(data: list[dict], search: str) -> list[dict]:
+    """
+    Принимать список словарей с данными о банковских операциях и строку поиска, а возвращать список словарей,
+    у которых в описании есть данная строка
+    """
+    result = []
+    for transaction in data:
+        if transaction.get("description") and re.search(search.lower(), transaction["description"].lower()):
+            result.append(transaction)
+    return result
+
+
+def process_bank_operations(data: list[dict], categories: list) -> dict:
+    """
+    Принимает список словарей с данными о банковских операциях и список категорий операций, а возвращает словарь,
+    в котором ключи — это названия категорий, а значения — это количество операций в каждой категории.
+    Категории операций хранятся в поле description
+    """
+    result_list = []
+    for transaction in data:
+        for category in categories:
+            if transaction.get("description") and (category.lower() == transaction["description"].lower()):
+                result_list.append(transaction["description"])
+    counted = Counter(result_list)
+    return counted

@@ -12,9 +12,10 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def read_csv_file(file_path: str) -> List[Dict[Hashable, Any]]:
+def read_csv_file(file_path: str = "data/transactions.csv") -> List[Dict[Hashable, Any]]:
     """
     Функция читает cvs файл. Принимает на фход путь к файлу и выводит список словарей (при ошибках пустой список)
+    Путь по умолчанию "data/transactions.csv"
     """
     logger.info(f"вызов read_csv_file с путем до файла: {file_path}")
     transactions: List[Dict[Hashable, Any]] = []
@@ -33,9 +34,10 @@ def read_csv_file(file_path: str) -> List[Dict[Hashable, Any]]:
     return transactions
 
 
-def read_excel_file(file_path: str) -> List[Dict[Hashable, Any]]:
+def read_excel_file(file_path: str = "data/transactions_excel.xlsx") -> List[Dict[Hashable, Any]]:
     """
     Функция читает exls файл. Принимает на фход путь к файлу и выводит список словарей (при ошибках пустой список)
+    Путь по умолчанию "data/transactions_excel.xlsx"
     """
     logger.info(f"вызов read_excel_file с путем до файла: {file_path}")
     try:
